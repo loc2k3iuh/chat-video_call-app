@@ -23,7 +23,7 @@ export const useStreamChat = () => {
   } = useQuery({
     queryKey: ["streamToken"],
     queryFn: getStreamToken,
-    enabled: !!user?.id, // this will take the object and convert it to a boolean
+    enabled: !!user?.id, // this will take  the object and convert it to a boolean
   });
 
   // init stream chat client
