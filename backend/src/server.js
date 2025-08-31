@@ -4,19 +4,23 @@ import { ENV } from "./config/env.js";
 import * as Sentry from "@sentry/node";
 import { serve } from "inngest/express";
 import { connectDB } from "./config/db.js";
-import chatRoutes  from "./routes/chat.route.js";
+import chatRoutes from "./routes/chat.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import { functions, inngest } from "./config/inngest.js";
-
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
 app.use(clerkMiddleware());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 app.get("/debug-sentry", (req, res) => {
   throw new Error("My First Sentry Error !");
-})
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World !");
