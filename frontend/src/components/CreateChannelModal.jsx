@@ -20,49 +20,48 @@ const CreateChannelModal = ({ onClose }) => {
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [_, setSearchParams] = useSearchParams();
-
   const { client, setActiveChannel } = useChatContext();
 
   //   fetch users for member Selection
-useEffect(() => {
-  const fetchUsers = async () => {
-    if (!client?.user?.id) {
-      console.log("Client user not ready yet");
-      return;
-    }
-    
-    setLoadingUsers(true);
-    try {
-      console.log("Current user ID:", client.user.id); // Debug log
-      
-      const response = await client.queryUsers(
-        { 
-          id: { $ne: client.user.id },
-        },
-        { name: 1 },
-        { limit: 100 }
-      );
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (!client?.user?.id) {
+        console.log("Client user not ready yet");
+        return;
+      }
 
-      console.log("Fetched users:", response.users); // Debug log
-      
-      // Double check để loại bỏ user hiện tại
-      const filteredUsers = response.users?.filter(user => user.id !== client.user.id) || [];
-      
-      setUsers(filteredUsers);
-    } catch (error) {
-      console.log("Error Fetching Users", error);
-      Sentry.captureException(error, {
-        tags: { component: "CreateChannelModal" },
-        extra: { context: "fetch_users_for_channel" },
-      });
-      setUsers([]);
-    } finally {
-      setLoadingUsers(false);
-    }
-  };
+      setLoadingUsers(true);
+      try {
+        console.log("Current user ID:", client.user.id); // Debug log
 
-  fetchUsers();
-}, [client]);
+        const response = await client.queryUsers(
+          {
+            id: { $ne: client.user.id },
+          },
+          { name: 1 },
+          { limit: 100 }
+        );
+
+        console.log("Fetched users:", response.users); // Debug log
+
+        // Double check để loại bỏ user hiện tại
+        const filteredUsers = response.users?.filter(user => user.id !== client.user.id) || [];
+
+        setUsers(filteredUsers);
+      } catch (error) {
+        console.log("Error Fetching Users", error);
+        Sentry.captureException(error, {
+          tags: { component: "CreateChannelModal" },
+          extra: { context: "fetch_users_for_channel" },
+        });
+        setUsers([]);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    fetchUsers();
+  }, [client]);
 
   useEffect(() => {
     if (channelType === "public") {
@@ -241,7 +240,7 @@ useEffect(() => {
                   disabled={loadingUsers || users.length === 0}
                 >
                   <UserIcon className="size-4 mr-1" />
-                 <span>Select Everyone</span>
+                  <span>Select Everyone</span>
                 </button>
                 <span className="selected-count">
                   {selectedMembers.length} selected
@@ -288,11 +287,11 @@ useEffect(() => {
           <div className="form-group">
             <label htmlFor="description">Description (optional)</label>
             <textarea id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="What's this channel about?"
-                className="form-textarea"
-                row={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What's this channel about?"
+              className="form-textarea"
+              row={3}
             />
           </div>
 
@@ -310,7 +309,7 @@ useEffect(() => {
               disabled={!channelName.trim() || isCreating}
               className="btn btn-primary"
             >
-                {isCreating ? "Creating..." : "Create Channel"}
+              {isCreating ? "Creating..." : "Create Channel"}
             </button>
           </div>
         </form>

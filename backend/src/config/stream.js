@@ -16,6 +16,13 @@ export const upsertStreamUser = async (userData) => {
   }
 };
 
+export const addUserToPublicChannels = async (userId) =>{
+  const publicChannels = await streamClient.queryChannels({discoverable: true});
+  for (const channel of publicChannels){
+    await channel.addMembers([userId]);
+  }
+}
+
 export const deleteStreamUser = async (userId) => {
   try {
     await streamClient.deleteUser(userId);
