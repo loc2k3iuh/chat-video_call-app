@@ -16,7 +16,9 @@ const UserList = ({ activeChannel }) => {
             { name: 1 },
             { limit: 20 }
         )
-        return response.users;
+
+        const userOnly = response.users.filter((user) => !user.id.startsWith("recording-"));
+        return userOnly;
     }, [client])
 
     const { data: users = [], isLoading, isError } = useQuery({
@@ -85,24 +87,24 @@ const UserList = ({ activeChannel }) => {
                                         </span>
                                     </div>
                                 )}
-                                 <CircleIcon
-                                className={`size-2 absolute -bottom-0.5 -right-0.5 ${user.online ? "text-green-500 fill-green-500" : "text-gray-400 fill-gray-400"
-                                    }`}
-                            />
-                       
+                                <CircleIcon
+                                    className={`size-2 absolute -bottom-0.5 -right-0.5 ${user.online ? "text-green-500 fill-green-500" : "text-gray-400 fill-gray-400"
+                                        }`}
+                                />
+
                             </div>
-                           
 
-                        <span className="str-chat__channel-preview-messenger-name truncate">
-                            {user.name || user.id}
-                        </span>
 
-                        {unreadCount > 0 && (
-                            <span className="flex items-center justify-center ml-2 size-4 text-xs rounded-full bg-red-500">
-                                {unreadCount}
+                            <span className="str-chat__channel-preview-messenger-name truncate">
+                                {user.name || user.id}
                             </span>
-                        )}
-                         </div>
+
+                            {unreadCount > 0 && (
+                                <span className="flex items-center justify-center ml-2 size-4 text-xs rounded-full bg-red-500">
+                                    {unreadCount}
+                                </span>
+                            )}
+                        </div>
                     </button>
                 )
             })}
