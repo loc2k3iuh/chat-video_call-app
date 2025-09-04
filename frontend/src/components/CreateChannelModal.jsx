@@ -42,10 +42,10 @@ const CreateChannelModal = ({ onClose }) => {
           { limit: 100 }
         );
 
-        console.log("Fetched users:", response.users); // Debug log
+        const userOnly = response.users.filter((user) => !user.id.startsWith("recording-"));
 
         // Double check để loại bỏ user hiện tại
-        const filteredUsers = response.users?.filter(user => user.id !== client.user.id) || [];
+        const filteredUsers = userOnly?.filter(user => user.id !== client.user.id) || [];
 
         setUsers(filteredUsers);
       } catch (error) {

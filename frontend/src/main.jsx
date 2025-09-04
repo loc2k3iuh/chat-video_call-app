@@ -20,14 +20,15 @@ import React from "react";
 const queryClient = new QueryClient({});
 
 // Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const VITE_SENTRY_DNS = import.meta.env.VITE_SENTRY_DNS;
 
-if (!PUBLISHABLE_KEY) {
+if (!VITE_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");
 }
 
 Sentry.init({
-  dsn: "https://0916aed7d206214934e09eae2042c33b@o4509905239015424.ingest.us.sentry.io/4509926613778432",
+  dsn: VITE_SENTRY_DNS,
   integrations: [
     Sentry.reactRouterV7BrowserTracingIntegration({
       useEffect: React.useEffect,
@@ -43,12 +44,10 @@ Sentry.init({
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+    <ClerkProvider publishableKey={VITE_CLERK_PUBLISHABLE_KEY}>
       <BrowserRouter>
-       
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            
             <App />
           </AuthProvider>
           <Toaster />
